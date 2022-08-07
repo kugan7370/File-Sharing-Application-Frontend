@@ -1,44 +1,66 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { Route, Routes } from 'react-router'
 import styled from 'styled-components'
 import Header from '../Components/Header'
 import Sidebar from '../Components/Sidebar'
 import Dashboard from './Dashboard'
+import MyFile from './MyFile'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  get_File_Failed,
+  get_File_request,
+  get_File_Success,
+} from '../Redux/FileSlicer'
+import axios from 'axios'
+import { Link, useNavigate } from 'react-router-dom'
 
 function Home() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const { Files, error } = useSelector((state) => state.file)
+  console.log(Files)
+
+  useEffect(() => {
+    const get_File_data = async () => {
+      try {
+        dispatch(get_File_request())
+        await axios.get('auth/getfile').then((result) => {
+          dispatch(get_File_Success(result.data))
+          navigate('/')
+        })
+      } catch (error) {
+        dispatch(get_File_Failed())
+        alert(error.response.data.message)
+      }
+    }
+    get_File_data()
+  }, [])
+
   return (
-      <HomeContainer>
-          <SidebarContainer>
-              <Sidebar />
-              </SidebarContainer>
-          <MainContainer>
-              <Header />
-              <Dashboard/>
-              
-          </MainContainer>
-  </HomeContainer>
+    <HomeContainer>
+      <Sidebar />
+      <MainContainer>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/myfile" element={<MyFile />} />
+        </Routes>
+      </MainContainer>
+    </HomeContainer>
   )
 }
 
 export default Home
 
-
-const HomeContainer=styled.div `
-    display: flex;
-    width: 100vw
+const HomeContainer = styled.div`
+  display: flex;
 `
-const SidebarContainer=styled.div `
-width: 200px;
-height: 100vh;
-
-
+const MainContainer = styled.div`
+  flex: 7;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  overflow-x: hidden;
 `
-
-const MainContainer = styled.div `
-width: calc(100vw - 200px);
-height: 100vh;
-
-display: flex;
-flex-direction: column;
-   
-`
-
