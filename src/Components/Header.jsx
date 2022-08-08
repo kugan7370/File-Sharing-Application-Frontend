@@ -47,4 +47,14 @@ const ProfileName = styled.h4`
   margin-right: 20px;
 `
 
-const Logout = styled.h4``
+const AddContainer = styled.label`
+  margin-right: 100px;
+  color: #528ffa;
+  font-size: 30px;
+  text-align: center;
+`
+
+const FileUpload = styled.input`
+  width: 0;
+  height: 0;
+`

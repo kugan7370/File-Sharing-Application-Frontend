@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router'
 import styled from 'styled-components'
 import Header from '../Components/Header'
@@ -17,9 +17,6 @@ import { Link, useNavigate } from 'react-router-dom'
 function Home() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
-  const { Files, error } = useSelector((state) => state.file)
-  console.log(Files)
 
   useEffect(() => {
     const get_File_data = async () => {

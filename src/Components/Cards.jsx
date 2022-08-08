@@ -3,28 +3,28 @@ import styled from 'styled-components'
 import DescriptionIcon from '@mui/icons-material/Description'
 import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined'
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined'
+import moment from 'moment'
+function Cards({ data }) {
+  return (
+    <CardContainer>
+      <CardIcon>
+        <DescriptionIcon fontSize="60px" />
+      </CardIcon>
+      <CardDetails>
+        <CartName>{data.name}</CartName>
+        <CartDate>{moment(data.createdAt).format('DD MMMM YYYY')}</CartDate>
+      </CardDetails>
 
-function Cards() {
-    return (
-        <CardContainer>
-            <CardIcon>
-                <DescriptionIcon fontSize="60px" />
-            </CardIcon>
-            <CardDetails>
-                <CartName>kugan.pdf</CartName>
-                <CartDate>2 min ago</CartDate>
-            </CardDetails>
-
-            <Options>
-                <Icons>
-                    <ShareOutlinedIcon fontSize="10" />
-                </Icons>
-                <Icons>
-                    <ArrowCircleDownOutlinedIcon fontSize="12" />
-                </Icons>
-            </Options>
-        </CardContainer>
-    )
+      <Options>
+        <Icons>
+          <ShareOutlinedIcon fontSize="10" />
+        </Icons>
+        <Icons>
+          <ArrowCircleDownOutlinedIcon fontSize="12" />
+        </Icons>
+      </Options>
+    </CardContainer>
+  )
 }
 
 export default Cards
@@ -38,7 +38,6 @@ const CardContainer = styled.div`
   border-radius: 20px;
   padding: 15px;
   position: relative;
-  
 `
 const CardIcon = styled.div`
   color: #528ffa;
@@ -46,28 +45,25 @@ const CardIcon = styled.div`
 `
 
 const CardDetails = styled.div`
-display: flex;
-flex-direction: column;
-margin-top: 30px;
-
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
 `
 const CartName = styled.span`
   font-weight: 500;
   font-size: 16px;
- 
 `
 const CartDate = styled.span`
   font-size: 12px;
   font-weight: 400;
- margin-top: 5px;
+  margin-top: 5px;
 `
 const Options = styled.div`
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    display: flex;
-    flex-direction: column;
-  
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  flex-direction: column;
 `
 
 const Icons = styled.div`
