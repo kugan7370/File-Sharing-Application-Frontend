@@ -1,12 +1,47 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import DescriptionIcon from '@mui/icons-material/Description'
 import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined'
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined'
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined'
 import moment from 'moment'
+import axios from 'axios'
+import { get_File_Success } from '../Redux/FileSlicer'
+import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
+
 function Cards({ data }) {
+  const dispatch = useDispatch()
+  const [optionsData, setoptionsData] = useState(false)
+
+  const FileDelete = async (id) => {
+    try {
+      await axios.delete(`auth/deletefile/${id}`).then(async (res) => {
+        alert(res.data)
+        await axios.get('auth/getfile').then((result) => {
+          dispatch(get_File_Success(result.data))
+        })
+      })
+    } catch (error) {
+      alert(error.response.data.message)
+    }
+  }
+
+  const handleFileShare = async (id) => {
+    try {
+      await axios.post('auth/fileshare').then(async (res) => {
+        alert(res.data)
+      })
+    } catch (error) {
+      alert(error.response.data.message)
+    }
+  }
+
   return (
-    <CardContainer>
+    <CardContainer
+      onMouseMove={() => setoptionsData(true)}
+      onMouseLeave={() => setoptionsData(false)}
+    >
       <CardIcon>
         <DescriptionIcon fontSize="60px" />
       </CardIcon>
@@ -15,14 +50,30 @@ function Cards({ data }) {
         <CartDate>{moment(data.createdAt).format('DD MMMM YYYY')}</CartDate>
       </CardDetails>
 
-      <Options>
-        <Icons>
-          <ShareOutlinedIcon fontSize="10" />
-        </Icons>
-        <Icons>
-          <ArrowCircleDownOutlinedIcon fontSize="12" />
-        </Icons>
-      </Options>
+      {optionsData ? (
+        <Options>
+          <Icons>
+            <Link
+              to={`/share/${data._id}`}
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              <ShareOutlinedIcon fontSize="10" />
+            </Link>
+          </Icons>
+          <Icons>
+            <DownloadFile
+              downloaded
+              href={`${data.url}?dl=`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ArrowCircleDownOutlinedIcon fontSize="12" />
+            </DownloadFile>
+          </Icons>
+          <Icons onClick={() => FileDelete(data._id)}>
+            <DeleteForeverOutlinedIcon fontSize="12" />
+          </Icons>
+        </Options>
+      ) : null}
     </CardContainer>
   )
 }
@@ -78,4 +129,9 @@ const Icons = styled.div`
   border-radius: 50%;
   padding: 2px;
   color: #528ffa;
+`
+const DownloadFile = styled.a`
+  text-decoration: none;
+  color: inherit;
+  font-size: 15px;
 `

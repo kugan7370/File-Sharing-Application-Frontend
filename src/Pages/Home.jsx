@@ -13,6 +13,9 @@ import {
 } from '../Redux/FileSlicer'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
+import Profile from './Profile'
+import SelectShare from './SelectShare'
+import { All_user_Failed, All_user_Success } from '../Redux/AllUserSlicer'
 
 function Home() {
   const dispatch = useDispatch()
@@ -34,6 +37,22 @@ function Home() {
     get_File_data()
   }, [])
 
+  useEffect(() => {
+    const get_All_User_data = async () => {
+      try {
+        dispatch(All_user_Failed())
+        await axios.get('auth/getalluser').then((result) => {
+          dispatch(All_user_Success(result.data))
+          navigate('/')
+        })
+      } catch (error) {
+        dispatch(All_user_Failed())
+        alert(error.response.data.message)
+      }
+    }
+    get_All_User_data()
+  }, [])
+
   return (
     <HomeContainer>
       <Sidebar />
@@ -42,6 +61,8 @@ function Home() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/myfile" element={<MyFile />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/share/:id" element={<SelectShare />} />
         </Routes>
       </MainContainer>
     </HomeContainer>

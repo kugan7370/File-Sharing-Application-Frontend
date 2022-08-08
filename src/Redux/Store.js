@@ -10,6 +10,7 @@ import {
     REGISTER,
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
+import AllUserReducer from './AllUserSlicer'
 import FileReducer from './FileSlicer'
 import UserReducer from './UserSlicer'
 
@@ -23,7 +24,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
     user: UserReducer,
-    file: FileReducer
+    file: FileReducer,
+    allUser: AllUserReducer
 
 
 })

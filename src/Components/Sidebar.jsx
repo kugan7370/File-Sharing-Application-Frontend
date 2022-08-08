@@ -60,15 +60,25 @@ function Sidebar() {
           </NavLinks>
         </Link>
 
-        <NavLinks>
-          <ShareOutlinedIcon />
-          <NavTitle>Shared File</NavTitle>
-        </NavLinks>
+        <Link
+          to={'/myfile'}
+          style={{ textDecoration: 'none', color: 'inherit' }}
+        >
+          <NavLinks>
+            <ShareOutlinedIcon />
+            <NavTitle>Shared File</NavTitle>
+          </NavLinks>
+        </Link>
 
-        <NavLinks>
-          <AccountCircleOutlinedIcon />
-          <NavTitle>Profile</NavTitle>
-        </NavLinks>
+        <Link
+          to={'/profile'}
+          style={{ textDecoration: 'none', color: 'inherit' }}
+        >
+          <NavLinks>
+            <AccountCircleOutlinedIcon />
+            <NavTitle>Profile</NavTitle>
+          </NavLinks>
+        </Link>
 
         <AddContainer>
           <NavLinks>
