@@ -1,30 +1,46 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import PublicIcon from '@mui/icons-material/Public'
 import VpnLockIcon from '@mui/icons-material/VpnLock'
+import { get_shared_Success } from '../Redux/SharedFileSlicer'
 
 function AllUserProfile({ user, fileId }) {
   const { AllUsers } = useSelector((state) => state.allUser)
   const { current_user } = useSelector((state) => state.user)
+  const { Files, error } = useSelector((state) => state.file)
   const [privates, setprivates] = useState(false)
+  const [singlefiledata, setsinglefiledata] = useState()
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const handleShare = async (user_id) => {
+  useEffect(() => {
+    if ((Files, fileId)) {
+      setsinglefiledata(Files.filter((file) => file._id == fileId))
+    }
+  }, [Files, fileId])
+
+  const handleShare = async (recevire_name) => {
     try {
       await axios
         .post('/auth/fileshare', {
           file_id: fileId,
-          sender_id: current_user.user._id,
-          receiver_id: user_id,
+          name: singlefiledata[0].name,
+          url: singlefiledata[0].url,
+          sender_name: current_user.user.username,
+          receiver_name: recevire_name,
           protect: privates,
         })
         .then((result) => {
           alert(result.data)
-          navigate('/')
+        })
+        .then(async () => {
+          await axios.get('/auth/getsharedfile').then((res) => {
+            dispatch(get_shared_Success(res.data))
+            navigate('/')
+          })
         })
     } catch (error) {
       alert(error.response.data.message)
@@ -33,7 +49,7 @@ function AllUserProfile({ user, fileId }) {
 
   return (
     <InnerContainer>
-      <Profile onClick={() => handleShare(user._id)}>
+      <Profile onClick={() => handleShare(user.username)}>
         <ProfileImage src={user.profile_image} />
         <ProfileName>{user.username}</ProfileName>
       </Profile>

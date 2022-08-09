@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import Cards from '../Components/Cards'
-import OtherSharedFiles from '../Components/OtherSharedFiles'
 import SharedCards from '../Components/SharedCards'
 
-function Dashboard() {
+function SharedFile() {
   const { sharedFiles } = useSelector((state) => state.sharedFile)
   const { current_user, error } = useSelector((state) => state.user)
 
@@ -14,13 +13,13 @@ function Dashboard() {
       {sharedFiles &&
         current_user &&
         sharedFiles
-          .filter((item) => item.receiver_name == current_user.user.username)
-          .map((myfile) => <OtherSharedFiles key={myfile._id} data={myfile} />)}
+          .filter((item) => item.sender_name == current_user.user.username)
+          .map((myfile) => <SharedCards key={myfile._id} data={myfile} />)}
     </Container>
   )
 }
 
-export default Dashboard
+export default SharedFile
 
 const Container = styled.div`
   width: 100%;

@@ -61,7 +61,7 @@ function Sidebar() {
         </Link>
 
         <Link
-          to={'/myfile'}
+          to={'/shared'}
           style={{ textDecoration: 'none', color: 'inherit' }}
         >
           <NavLinks>

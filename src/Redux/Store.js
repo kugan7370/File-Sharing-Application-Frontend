@@ -12,6 +12,7 @@ import {
 import storage from 'redux-persist/lib/storage'
 import AllUserReducer from './AllUserSlicer'
 import FileReducer from './FileSlicer'
+import SharedFileSlicer from './SharedFileSlicer'
 import UserReducer from './UserSlicer'
 
 
@@ -25,7 +26,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
     user: UserReducer,
     file: FileReducer,
-    allUser: AllUserReducer
+    allUser: AllUserReducer,
+    sharedFile: SharedFileSlicer
 
 
 })

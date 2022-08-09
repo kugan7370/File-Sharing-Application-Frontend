@@ -9,17 +9,20 @@ import axios from 'axios'
 import { get_File_Success } from '../Redux/FileSlicer'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { get_shared_Success } from '../Redux/SharedFileSlicer'
+import PublicIcon from '@mui/icons-material/Public'
+import VpnLockIcon from '@mui/icons-material/VpnLock'
 
-function Cards({ data }) {
+function OtherSharedFiles({ data }) {
   const dispatch = useDispatch()
   const [optionsData, setoptionsData] = useState(false)
 
   const FileDelete = async (id) => {
     try {
-      await axios.delete(`auth/deletefile/${id}`).then(async (res) => {
+      await axios.delete(`auth/deletesharedfile/${id}`).then(async (res) => {
         alert(res.data)
-        await axios.get('auth/getfile').then((result) => {
-          dispatch(get_File_Success(result.data))
+        await axios.get('auth/getsharedfile').then((result) => {
+          dispatch(get_shared_Success(result.data))
         })
       })
     } catch (error) {
@@ -38,17 +41,31 @@ function Cards({ data }) {
       <CardDetails>
         <CartName>{data.name}</CartName>
         <CartDate>{moment(data.createdAt).format('DD MMMM YYYY')}</CartDate>
+        <SharedName>{data.sender_name}</SharedName>
+        <ProtectIcon>
+          {data.protect ? (
+            <VpnLockIcon fontSize="20px" />
+          ) : (
+            <PublicIcon fontSize="20px" />
+          )}
+        </ProtectIcon>
       </CardDetails>
 
       {optionsData ? (
         <Options>
           <Icons>
-            <Link
-              to={`/share/${data._id}`}
-              style={{ textDecoration: 'none', color: 'inherit' }}
-            >
-              <ShareOutlinedIcon fontSize="10" />
-            </Link>
+            {!data.protect ? (
+              <Link
+                to={`/share/${data.file_id}`}
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                <ShareOutlinedIcon fontSize="10" />
+              </Link>
+            ) : (
+              <NotShare onClick={() => alert('it is Secure File')}>
+                <ShareOutlinedIcon fontSize="10" />
+              </NotShare>
+            )}
           </Icons>
           <Icons>
             <DownloadFile
@@ -68,12 +85,12 @@ function Cards({ data }) {
   )
 }
 
-export default Cards
+export default OtherSharedFiles
 
 const CardContainer = styled.div`
   width: 150px;
-  height: 150px;
-  background-color: #d9e7ff;
+  height: 200px;
+  background-color: #e2d7ff;
   display: flex;
   flex-direction: column;
   border-radius: 20px;
@@ -81,7 +98,7 @@ const CardContainer = styled.div`
   position: relative;
 `
 const CardIcon = styled.div`
-  color: #528ffa;
+  color: #683cb5;
   font-size: 50px;
 `
 
@@ -125,3 +142,13 @@ const DownloadFile = styled.a`
   color: inherit;
   font-size: 15px;
 `
+const SharedName = styled.span`
+  font-size: 12px;
+  font-weight: 400;
+  margin-top: 5px;
+`
+const ProtectIcon = styled.span`
+  font-size: 12px;
+  margin-top: 5px;
+`
+const NotShare = styled.span``

@@ -16,6 +16,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import Profile from './Profile'
 import SelectShare from './SelectShare'
 import { All_user_Failed, All_user_Success } from '../Redux/AllUserSlicer'
+import {
+  get_shared_Failed,
+  get_shared_request,
+  get_shared_Success,
+} from '../Redux/SharedFileSlicer'
+import SharedFile from './SharedFile'
 
 function Home() {
   const dispatch = useDispatch()
@@ -53,6 +59,22 @@ function Home() {
     get_All_User_data()
   }, [])
 
+  useEffect(() => {
+    const get_Shared_Files = async () => {
+      try {
+        dispatch(get_shared_request())
+        await axios.get('auth/getsharedfile').then((result) => {
+          dispatch(get_shared_Success(result.data))
+          navigate('/')
+        })
+      } catch (error) {
+        dispatch(get_shared_Failed())
+        alert(error.response.data.message)
+      }
+    }
+    get_Shared_Files()
+  }, [])
+
   return (
     <HomeContainer>
       <Sidebar />
@@ -63,6 +85,7 @@ function Home() {
           <Route path="/myfile" element={<MyFile />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/share/:id" element={<SelectShare />} />
+          <Route path="/shared/" element={<SharedFile />} />
         </Routes>
       </MainContainer>
     </HomeContainer>
